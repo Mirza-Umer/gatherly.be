@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -19,9 +19,12 @@ export class User {
     enum: ['male', 'female', 'custom'],
     default: 'custom',
   })
-  gender:  'male' | 'female' | 'custom';
+  gender: 'male' | 'female' | 'custom';
   @Column()
   phone: string;
   @Column()
   age: number;
+
+  @ManyToOne(() => User, (user) => user.posts, { nullable: true })
+  posts: User[];
 }
