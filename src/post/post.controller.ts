@@ -5,6 +5,8 @@ import {
   UseGuards,
   UploadedFile,
   UseInterceptors,
+  Get,
+  Query,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -13,11 +15,11 @@ import { User } from '../users/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-@UseGuards(AuthGuard('jwt'))
 @Controller('posts')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Post('add')
   @UseInterceptors(FileInterceptor('photo')) // <-- name must match Angular form
   create(
@@ -27,11 +29,10 @@ export class PostController {
   ) {
     return this.postService.create(createPostDto, user, photo);
   }
-
-  // @Get()
-  // findAll() {
-  //   return this.postService.findAll();
-  // }
+  @Get()
+  async findAll(@Query() { size, page }: { size: number; page: number }) {
+    return await this.postService.getAllPosts(size, page);
+  }
   //
   // @Get(':id')
   // findOne(@Param('id') id: string) {
