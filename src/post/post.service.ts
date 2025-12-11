@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { Post } from './entities/post.entity';
 import { User } from '../users/entities/user.entity';
 import { fileTypeFromBuffer } from 'file-type';
+import sharp from 'sharp';
 
 @Injectable()
 export class PostService {
@@ -32,16 +33,62 @@ export class PostService {
     const updated = await Promise.all(
       data.map(async (post: any) => {
         if (post.photo) {
-          const type = await fileTypeFromBuffer(post.photo);
-          const mimeType = type?.mime || 'image/jpeg'; // fallback
-          const base64 = post.photo.toString('base64');
+          let buffer = post.photo;
+
+          // Detect type from buffer
+          const type = await fileTypeFromBuffer(buffer);
+          let mimeType = type?.mime || 'image/jpeg';
+
+          // Convert HEIC → PNG
+          if (mimeType.includes('heic') || mimeType.includes('heif')) {
+            buffer = await sharp(buffer).png().toBuffer();
+            mimeType = 'image/png';
+          }
+
+          // Convert to base64
+          const base64 = buffer.toString('base64');
           post.photoUrl = `data:${mimeType};base64,${base64}`;
+        } else {
+          post.photoUrl = null;
         }
+
         return post;
       }),
     );
 
     return { data: updated, total };
+  }
+
+  async getPostsByUserId(id: number) {
+    const posts = await this.postRepo.find({
+      where: { user: { id } },
+    });
+
+    const updated = await Promise.all(
+      posts.map(async (post: any) => {
+        if (post.photo) {
+          let buffer = post.photo;
+
+          const type = await fileTypeFromBuffer(buffer);
+          let mimeType = type?.mime || 'image/jpeg';
+
+          // Convert HEIC or unsupported type → PNG
+          if (mimeType.includes('heic') || mimeType.includes('heif')) {
+            buffer = await sharp(buffer).png().toBuffer();
+            mimeType = 'image/png';
+          }
+
+          const base64 = buffer.toString('base64');
+          post.photoUrl = `data:${mimeType};base64,${base64}`;
+        } else {
+          post.photoUrl = null;
+        }
+
+        return post;
+      }),
+    );
+
+    return { posts: updated };
   }
 
   //

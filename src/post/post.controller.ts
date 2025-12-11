@@ -7,6 +7,7 @@ import {
   UseInterceptors,
   Get,
   Query,
+  Param,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -33,12 +34,13 @@ export class PostController {
   async findAll(@Query() { size, page }: { size: number; page: number }) {
     return await this.postService.getAllPosts(size, page);
   }
-  //
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.postService.findOne(+id);
-  // }
-  //
+
+  @Get(':userId')
+  findOne(@Param('userId') id: number) {
+    console.log(id);
+    return this.postService.getPostsByUserId(id);
+  }
+
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
   //   return this.postService.update(+id, updatePostDto);
