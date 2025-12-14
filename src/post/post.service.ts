@@ -62,6 +62,7 @@ export class PostService {
   async getPostsByUserId(id: number) {
     const posts = await this.postRepo.find({
       where: { user: { id } },
+      relations: ['user'],
     });
 
     const updated = await Promise.all(

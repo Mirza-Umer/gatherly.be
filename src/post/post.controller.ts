@@ -36,7 +36,7 @@ export class PostController {
   }
 
   @Get(':userId')
-  findOne(@Param('userId') id: number) {
+  find(@Param('userId') id: number) {
     console.log(id);
     return this.postService.getPostsByUserId(id);
   }

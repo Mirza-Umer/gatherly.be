@@ -1,6 +1,6 @@
 // import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../auth/get-user.decorator';
 import { User } from './entities/user.entity';
@@ -16,7 +16,10 @@ export class UsersController {
     return this.usersService.getUserById(user.id);
   }
 
-
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.usersService.getUserById(id);
+  }
   // @Post()
   // create(@Body() createUserDto: CreateUserDto) {
   //   return this.usersService.create(createUserDto);
