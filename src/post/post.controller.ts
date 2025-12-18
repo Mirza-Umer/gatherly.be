@@ -28,7 +28,7 @@ export class PostController {
     @GetUser() user: User,
     @UploadedFile() photo: Express.Multer.File,
   ) {
-    return this.postService.create(createPostDto, user, photo);
+     return this.postService.create(createPostDto, user, photo);
   }
   @Get()
   async findAll(@Query() { size, page }: { size: number; page: number }) {

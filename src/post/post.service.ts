@@ -25,7 +25,7 @@ export class PostService {
 
   async getAllPosts(take = 10, page = 0) {
     const [data, total] = await this.postRepo.findAndCount({
-      relations: ['user'],
+      relations: ['user',],
       take,
       skip: page * take,
     });

@@ -2,7 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
+  ManyToOne, OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
@@ -27,4 +27,9 @@ export class Post {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @OneToMany(() => Post , (Post) => Post.comments , {nullable: true})
+  comments: Post[];
+
+
 }

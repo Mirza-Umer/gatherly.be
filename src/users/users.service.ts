@@ -36,7 +36,14 @@ export class UsersService {
   async getUserById(id: number): Promise<User | null> {
     return await this.userRepo.findOne({
       where: { id },
+      relations: ['posts'],
     });
+  }
+
+  async getLoggedInUser(id: number): Promise<User | null> {
+    return await this.userRepo.findOne({
+      where: { id },
+    })
   }
 
   // create(createUserDto: CreateUserDto) {

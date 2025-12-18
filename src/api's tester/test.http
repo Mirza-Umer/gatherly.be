@@ -1,3 +1,14 @@
-### GET request with parameter
-GET http://localhost:3000/users/1
+#POST http://localhost:3000/comments/add
+#Content-Type: application/json
+#
+#{
+#  "comment": "content",
+#  "postId": 2
+#}
+
+
+
+
+#### GET request with parameter
+GET http://localhost:3000/comments/34
 Accept: application/json
