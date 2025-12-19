@@ -26,7 +26,7 @@ export class CommentsService {
   getAllCommentsById(id: number) {
     return this.commentRepo.find({
       where: { post: { id } },
-      relations: ['user'],
+      relations: ['user','post'],
     });
   }
 
