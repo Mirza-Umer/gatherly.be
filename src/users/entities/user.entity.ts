@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Post } from '../../post/entities/post.entity';
 import { Comment } from '../../comments/entities/comment.entity';
+import { Like } from '../../likes/entities/like.entity';
 
 @Entity()
 export class User {
@@ -34,9 +35,12 @@ export class User {
   age: number;
 
   @OneToMany(() => Post, (post) => post.user, { nullable: true })
-  posts: User[];
+  posts: Post[];
 
   @OneToMany(() => Comment, (comment) => comment.user, { nullable: true })
-  comments: User[];
+  comments: Comment[];
+
+  @OneToMany(() => Like, (like) => like.user, { nullable: true })
+  likes: Like[];
 
 }

@@ -1,14 +1,8 @@
-#POST http://localhost:3000/comments/add
-#Content-Type: application/json
-#
-#{
-#  "comment": "content",
-#  "postId": 2
-#}
+POST http://localhost:3000/likes/34/like
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1bWFyMTJAZ21haWwuY29tIiwiaWF0IjoxNzY2MTU4NDU1LCJleHAiOjE3NjYyNDQ4NTV9.sdDXZLLMEjwKjtWtfekUIxEiml2EH_Q3E5W71Z5Wpno
 
 
 
-
-#### GET request with parameter
-GET http://localhost:3000/comments/34
-Accept: application/json
+##### GET request with parameter
+#GET http://localhost:3000/comments/34
+#Accept: application/json

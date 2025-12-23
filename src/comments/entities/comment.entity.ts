@@ -2,11 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
+  ManyToOne, OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Post } from '../../post/entities/post.entity';
 import { User } from '../../users/entities/user.entity';
+import { Like } from '../../likes/entities/like.entity';
 
 @Entity()
 export class Comment {
@@ -24,6 +25,9 @@ export class Comment {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @OneToMany(() => Comment, comment => comment.likes)
+  likes: Like[];
 
 
 }

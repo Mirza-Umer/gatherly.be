@@ -28,11 +28,16 @@ export class PostController {
     @GetUser() user: User,
     @UploadedFile() photo: Express.Multer.File,
   ) {
-     return this.postService.create(createPostDto, user, photo);
+    return this.postService.create(createPostDto, user, photo);
   }
   @Get()
-  async findAll(@Query() { size, page }: { size: number; page: number }) {
-    return await this.postService.getAllPosts(size, page);
+  @UseGuards(AuthGuard('jwt'))
+  getAllPosts(
+    @Query('take') take = 10,
+    @Query('page') page = 0,
+    @GetUser() currentUser: User,
+  ) {
+    return this.postService.getAllPosts(take, page, currentUser);
   }
 
   @Get(':userId')

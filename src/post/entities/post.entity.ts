@@ -6,6 +6,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import { Like } from '../../likes/entities/like.entity';
+import { Comment } from '../../comments/entities/comment.entity';
 
 @Entity()
 export class Post {
@@ -28,8 +30,13 @@ export class Post {
   @CreateDateColumn()
   createdAt: Date;
 
-  @OneToMany(() => Post , (Post) => Post.comments , {nullable: true})
-  comments: Post[];
+  @OneToMany(() => Comment, (comment) => comment.post)
+  comments: Comment[];
 
+  @OneToMany(() => Like, (like) => like.post)
+  likes: Like[];
 
 }
+
+
+
