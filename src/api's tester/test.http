@@ -1,5 +1,5 @@
-POST http://localhost:3000/likes/34/like
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1bWFyMTJAZ21haWwuY29tIiwiaWF0IjoxNzY2MTU4NDU1LCJleHAiOjE3NjYyNDQ4NTV9.sdDXZLLMEjwKjtWtfekUIxEiml2EH_Q3E5W71Z5Wpno
+GET http://localhost:3000/friend-request/friends
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1bWFyMTJAZ21haWwuY29tIiwiaWF0IjoxNzY2NDk3ODE5LCJleHAiOjE3NjY1ODQyMTl9.5NPlOouOibiwaocL4gWmRllPFX-JQh0FG5XsclYCETA
 
 
 

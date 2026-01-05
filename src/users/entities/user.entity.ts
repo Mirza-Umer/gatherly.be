@@ -8,6 +8,7 @@ import {
 import { Post } from '../../post/entities/post.entity';
 import { Comment } from '../../comments/entities/comment.entity';
 import { Like } from '../../likes/entities/like.entity';
+import { FriendRequest } from '../../friend-request/entities/friend-request.entity';
 
 @Entity()
 export class User {
@@ -43,4 +44,9 @@ export class User {
   @OneToMany(() => Like, (like) => like.user, { nullable: true })
   likes: Like[];
 
+  @OneToMany(() => FriendRequest, (fr) => fr.sender)
+  sentFriendRequests: FriendRequest[];
+
+  @OneToMany(() => FriendRequest, (fr) => fr.receiver)
+  receivedFriendRequests: FriendRequest[];
 }

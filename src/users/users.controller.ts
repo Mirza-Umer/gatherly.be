@@ -13,7 +13,7 @@ export class UsersController {
   @UseGuards(AuthGuard('jwt'))
   getProfile(@GetUser() user: User) {
     console.log('USER:', user);
-    return this.usersService.getLoggedInUser(user.id);
+    return this.usersService.getLoggedInUser( user.id);
   }
 
   @Get(':id')
