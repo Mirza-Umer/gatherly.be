@@ -8,6 +8,7 @@ import { PostModule } from './post/post.module';
 import { CommentsModule } from './comments/comments.module';
 import { LikesModule } from './likes/likes.module';
 import { FriendRequestModule } from './friend-request/friend-request.module';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { FriendRequestModule } from './friend-request/friend-request.module';
     CommentsModule,
     LikesModule,
     FriendRequestModule,
+    MessagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

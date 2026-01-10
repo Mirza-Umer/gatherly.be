@@ -1,13 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { config } from 'dotenv';
+import { IoAdapter } from '@nestjs/platform-socket.io';
+
+config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.useWebSocketAdapter(new IoAdapter(app));
   app.enableCors({
-      origin: 'http://localhost:4200',
-    methods: ['GET', 'POST' , 'PATCH', 'DELETE'],
+    origin: 'http://localhost:4200',
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     credentials: true,
   });
+
+  console.log('SOCKET.IO ADAPTER REGISTERED');
+
   await app.listen( 3000);
 }
 bootstrap();

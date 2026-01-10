@@ -19,7 +19,7 @@ export class CommentsService {
     return this.commentRepo.save({
       comment: createCommentDto.comment,
       user: user,
-      post: {id:createCommentDto.postId},
+      post: { id: createCommentDto.postId },
     });
   }
 
