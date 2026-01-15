@@ -1,6 +1,6 @@
 // import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../auth/get-user.decorator';
 import { User } from './entities/user.entity';
@@ -9,11 +9,17 @@ import { User } from './entities/user.entity';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Get('search')
+  @UseGuards(AuthGuard('jwt'))
+  searchUsers(@Query('searchInput') searchInput: string) {
+    return this.usersService.searchUsers(searchInput);
+  }
+
   @Get('currentUser')
   @UseGuards(AuthGuard('jwt'))
   getProfile(@GetUser() user: User) {
     console.log('USER:', user);
-    return this.usersService.getLoggedInUser( user.id);
+    return this.usersService.getLoggedInUser(user.id);
   }
 
   @Get(':id')
@@ -24,6 +30,7 @@ export class UsersController {
   getAllUsers() {
     return this.usersService.getAllUsers();
   }
+
   // @Post()
   // create(@Body() createUserDto: CreateUserDto) {
   //   return this.usersService.create(createUserDto);

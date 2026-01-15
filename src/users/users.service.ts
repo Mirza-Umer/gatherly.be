@@ -2,7 +2,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -51,7 +51,15 @@ export class UsersService {
     return await this.userRepo.find({
       relations: {sentFriendRequests: true, receivedFriendRequests: true},
     });
-
+  }
+  
+  async searchUsers(searchInput: string): Promise<User[]> {
+    return await this.userRepo.find({
+      where: [{ firstName: ILike(`%${searchInput}%`) },
+          { lastName: ILike(`%${searchInput}%`) },
+      ],
+      relations: ['sentFriendRequests', 'receivedFriendRequests',],
+    });
   }
 
   // create(createUserDto: CreateUserDto) {

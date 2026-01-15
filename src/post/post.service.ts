@@ -27,6 +27,7 @@ export class PostService {
 
   async getAllPosts(take = 10, page = 0, currentUser?: User) {
     const [posts, total] = await this.postRepo.findAndCount({
+      order: { createdAt: 'DESC' },
       relations: ['user', 'likes', 'likes.user'],
       take,
       skip: page * take,
@@ -59,9 +60,11 @@ export class PostService {
           ),
         };
       }),
+
     );
 
     return { data, total };
+
   }
 
   async getPostsByUserId(id: number) {

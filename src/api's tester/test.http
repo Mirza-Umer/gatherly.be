@@ -1,10 +1,10 @@
-GET http://localhost:3000/messages/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJhaG1hZDEyQGdtYWlsLmNvbSIsImlhdCI6MTc2NzY1MjE4NSwiZXhwIjoxNzY3NzM4NTg1fQ.nB3hITHgqBDcMi88IJv498HQwD16M8qtKEn0A4WQkmc
+#GET http://localhost:3000/messages/1
+#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJhaG1hZDEyQGdtYWlsLmNvbSIsImlhdCI6MTc2NzY1MjE4NSwiZXhwIjoxNzY3NzM4NTg1fQ.nB3hITHgqBDcMi88IJv498HQwD16M8qtKEn0A4WQkmc
 
-###### GET request with parameter
-##GET http://localhost:3000/comments/34
-##Accept: application/json
-#
+##### GET request with parameter
+#GET http://localhost:3000/users/search?searchInput=sh
+#Accept: application/json
+
 #### Send POST request with json body
 #
 #POST http://localhost:3000/messages/send-message
