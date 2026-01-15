@@ -55,7 +55,7 @@ export class FriendRequestService {
     }
 
     request.status = 'accepted';
-    return this.friendRepo.save(request);
+    return await this.friendRepo.save(request);
   }
 
   async rejectRequest(requestId: number, user: User) {
@@ -87,8 +87,8 @@ export class FriendRequestService {
   async getFriendRequests(user: User) {
     const requests = await this.friendRepo.find({
       where: [
-        { sender: { id: user.id }, status: 'pending' },
-        { receiver: { id: user.id }, status: 'pending' },
+        { sender: { id: user.id }, },
+        { receiver: { id: user.id }, },
       ],
       relations: ['sender', 'receiver'],
     });

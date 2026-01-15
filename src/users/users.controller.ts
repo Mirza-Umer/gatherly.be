@@ -20,6 +20,10 @@ export class UsersController {
   findOne(@Param('id') id: number) {
     return this.usersService.getUserById(id);
   }
+  @Get()
+  getAllUsers() {
+    return this.usersService.getAllUsers();
+  }
   // @Post()
   // create(@Body() createUserDto: CreateUserDto) {
   //   return this.usersService.create(createUserDto);

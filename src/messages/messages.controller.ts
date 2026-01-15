@@ -15,7 +15,7 @@ export class MessagesController {
     console.log(user.id);
     return this.messagesService.sendMessage(user.id, dto);
   }
-  @Get(':userId')
+  @Get(':receiverId')
   getMessages(@GetUser() user: User,@Param('receiverId') receiverId: number) {
     return this.messagesService.getMessages(user.id, receiverId);
   }

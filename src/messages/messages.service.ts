@@ -36,7 +36,7 @@ export class MessagesService {
     return this.messageRepo.find({
       where: [
         { sender: { id: senderId }, receiver: { id: receiverId } },
-        { sender: { id: receiverId }, receiver: { id: senderId } },
+        { sender: { id:  receiverId }, receiver: { id: senderId } },
       ],
       order: { createdAt: 'ASC' },
       relations: ['sender', 'receiver'],
