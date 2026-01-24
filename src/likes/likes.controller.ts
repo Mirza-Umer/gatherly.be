@@ -28,7 +28,6 @@ export class LikesController {
     return this.likesService.likePost(id, user);
   }
 
-
   //
   // @Get()
   // findAll() {
