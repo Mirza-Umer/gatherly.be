@@ -34,6 +34,7 @@
     "@nestjs/typeorm": "^11.0.0",
     "@nestjs/websockets": "^11.1.11",
     "@types/jsonwebtoken": "^9.0.10",
+    "axios": "^1.13.2",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",
     "file-type": "^21.1.1",

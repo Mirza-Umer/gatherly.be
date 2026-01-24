@@ -9,6 +9,7 @@ import { CommentsModule } from './comments/comments.module';
 import { LikesModule } from './likes/likes.module';
 import { FriendRequestModule } from './friend-request/friend-request.module';
 import { MessagesModule } from './messages/messages.module';
+import { AiChatModule } from './ai-chat/ai-chat.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { MessagesModule } from './messages/messages.module';
     LikesModule,
     FriendRequestModule,
     MessagesModule,
+    AiChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -7,11 +7,10 @@
 
 #### Send POST request with json body
 #
-#POST http://localhost:3000/messages/send-message
-#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJhaG1hZDEyQGdtYWlsLmNvbSIsImlhdCI6MTc2NzY1MjE4NSwiZXhwIjoxNzY3NzM4NTg1fQ.nB3hITHgqBDcMi88IJv498HQwD16M8qtKEn0A4WQkmc
-#Content-Type: application/json
-#
-#{
-#  "receiverId": 1,
-#  "message": "kia haal hain bhai"
-#}
+POST http://localhost:3000/ai-chat/chat
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1bWFyMTJAZ21haWwuY29tIiwiaWF0IjoxNzY5MTc5MTA1LCJleHAiOjE3NjkyNjU1MDV9.xHCCnLMdu8Afk7YieaMalVWmv9SlWmkdzm-4yQwKYYs
+Content-Type: application/json
+
+{
+  "message": "who is pm of pakistan in 2025?"
+}
