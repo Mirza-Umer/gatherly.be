@@ -100,6 +100,38 @@ export class PostService {
     return { posts: updated };
   }
 
+  async getPostById(id: number) {
+    const post: any = await this.postRepo.findOne({
+      where: { id },
+      relations: ['user'],
+    });
+
+    if (!post) {
+      return null;
+    }
+
+    if (post.photo) {
+      let buffer = post.photo;
+
+      const type = await fileTypeFromBuffer(buffer);
+      let mimeType = type?.mime || 'image/jpeg';
+
+      // Convert HEIC / HEIF → PNG
+      if (mimeType.includes('heic') || mimeType.includes('heif')) {
+        buffer = await sharp(buffer).png().toBuffer();
+        mimeType = 'image/png';
+      }
+
+      const base64 = buffer.toString('base64');
+      post.photoUrl = `data:${mimeType};base64,${base64}`;
+    } else {
+      post.photoUrl = null;
+    }
+
+    return post;
+  }
+
+
   //
   // findOne(id: number) {
   //   return `This action returns a #${id} post`;

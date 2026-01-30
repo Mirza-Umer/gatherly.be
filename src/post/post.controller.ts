@@ -41,11 +41,15 @@ export class PostController {
   }
 
   @Get(':userId')
-  find(@Param('userId') id: number) {
-    console.log(id);
-    return this.postService.getPostsByUserId(id);
+  find(@Param('userId') userId: number) {
+    console.log(userId);
+    return this.postService.getPostsByUserId(userId);
   }
 
+  @Get('post/:id')
+  getPostById(@Param('id') id: number) {
+    return this.postService.getPostById(id);
+  }
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
   //   return this.postService.update(+id, updatePostDto);

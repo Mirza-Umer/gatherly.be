@@ -2,15 +2,15 @@
 #Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJhaG1hZDEyQGdtYWlsLmNvbSIsImlhdCI6MTc2NzY1MjE4NSwiZXhwIjoxNzY3NzM4NTg1fQ.nB3hITHgqBDcMi88IJv498HQwD16M8qtKEn0A4WQkmc
 
 ##### GET request with parameter
-#GET http://localhost:3000/users/search?searchInput=sh
+#GET http://localhost:3000/posts/post/54
 #Accept: application/json
-
-#### Send POST request with json body
 #
-POST http://localhost:3000/ai-chat/chat
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1bWFyMTJAZ21haWwuY29tIiwiaWF0IjoxNzY5MTc5MTA1LCJleHAiOjE3NjkyNjU1MDV9.xHCCnLMdu8Afk7YieaMalVWmv9SlWmkdzm-4yQwKYYs
-Content-Type: application/json
-
-{
-  "message": "who is pm of pakistan in 2025?"
-}
+###### Send POST request with json body
+##
+#POST http://localhost:3000/ai-chat/chat
+#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1bWFyMTJAZ21haWwuY29tIiwiaWF0IjoxNzY5MTc5MTA1LCJleHAiOjE3NjkyNjU1MDV9.xHCCnLMdu8Afk7YieaMalVWmv9SlWmkdzm-4yQwKYYs
+#Content-Type: application/json
+#
+#{
+#  "message": "who is pm of pakistan in 2025?"
+#}
