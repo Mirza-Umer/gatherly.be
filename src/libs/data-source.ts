@@ -6,7 +6,7 @@ export default new DataSource({
   host: 'localhost',
   port: 5432,
   username:'postgres',
-  password:'postgres',
+  password:'POSTGRES',
   database: 'gatherly-db',
   entities: [
     path.join(__dirname, '../../**/*.entity.ts')

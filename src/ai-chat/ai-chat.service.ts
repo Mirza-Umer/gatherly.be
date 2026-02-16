@@ -12,7 +12,7 @@ export class AiChatService {
     const response = await axios.post(
       process.env.AI_API_URL!,
       {
-        model: 'openai/gpt-3.5-turbo',
+        model: 'gpt-3.5-turbo',
         messages: [{ role: 'user', content: message }],
       },
       {
@@ -22,6 +22,8 @@ export class AiChatService {
         },
       },
     );
+
+    console.log(process.env.AI_API_KEY);
 
     return response.data.choices[0].message.content;
   }
