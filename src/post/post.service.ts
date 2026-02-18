@@ -7,12 +7,15 @@ import { User } from '../users/entities/user.entity';
 import { fileTypeFromBuffer } from 'file-type';
 import sharp from 'sharp';
 import { Like } from '../likes/entities/like.entity';
+import { SavedPost } from './entities/savedPost.entity';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectRepository(Post) private readonly postRepo: Repository<Post>,
     @InjectRepository(Like) private readonly likeRepo: Repository<Like>,
+    @InjectRepository(SavedPost)
+    private readonly savedPostRepo: Repository<SavedPost>,
   ) {}
 
   create(createPostDto: CreatePostDto, user: User, photo: Express.Multer.File) {
@@ -28,7 +31,14 @@ export class PostService {
   async getAllPosts(take = 10, page = 0, currentUser?: User) {
     const [posts, total] = await this.postRepo.findAndCount({
       order: { createdAt: 'DESC' },
-      relations: ['user', 'likes', 'likes.user'],
+      relations: [
+        'user',
+        'likes',
+        'likes.user',
+        'savedByUsers',
+        'savedByUsers.user',
+      ],
+
       take,
       skip: page * take,
     });
@@ -55,16 +65,16 @@ export class PostService {
         return {
           ...post,
           likesCount: post.likes.length,
-          isLiked: post.likes.some(
-            (like) => like.user.id === currentUser?.id
-          ),
+          isLiked: post.likes.some((like) => like.user.id === currentUser?.id),
+          isSaved:
+            post.savedByUsers?.some(
+              (saved) => saved.user.id === currentUser?.id,
+            ) || false,
         };
       }),
-
     );
 
     return { data, total };
-
   }
 
   async getPostsByUserId(id: number) {
@@ -131,6 +141,50 @@ export class PostService {
     return post;
   }
 
+  async savePost(userId: number, postId: number) {
+    const existing = await this.savedPostRepo.findOne({
+      where: { user: { id: userId }, post: { id: postId } },
+    });
+    if (existing) {
+      return { message: 'Already saved' };
+    }
+    const saved = this.savedPostRepo.create({
+      user: { id: userId },
+      post: { id: postId },
+    });
+    return await this.savedPostRepo.save(saved);
+  }
+  async unsavePost(userId: number, postId: number) {
+    await this.savedPostRepo.delete({
+      user: { id: userId },
+      post: { id: postId },
+    });
+    return { message: 'Post unsaved' };
+  }
+  async getSavedPosts(userId: number) {
+    const savedPosts = await this.savedPostRepo.find({
+      where: { user: { id: userId } },
+      relations: ['post', 'post.user'],
+      order: { id: 'DESC' },
+    });
+
+    const updated = await Promise.all(
+      savedPosts.map(async (item: any) => {
+        const post = item.post;
+
+        if (post.photo) {
+          const base64 = post.photo.toString('base64');
+          post.photoUrl = `data:image/jpeg;base64,${base64}`;
+        } else {
+          post.photoUrl = null;
+        }
+
+        return post; // return only post
+      }),
+    );
+
+    return updated;
+  }
 
   //
   // findOne(id: number) {

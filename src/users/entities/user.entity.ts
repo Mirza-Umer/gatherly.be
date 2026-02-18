@@ -10,6 +10,7 @@ import { Comment } from '../../comments/entities/comment.entity';
 import { Like } from '../../likes/entities/like.entity';
 import { FriendRequest } from '../../friend-request/entities/friend-request.entity';
 import { Message } from '../../messages/entities/message.entity';
+import { SavedPost } from '../../post/entities/savedPost.entity';
 
 @Entity()
 export class User {
@@ -56,4 +57,6 @@ export class User {
 
   @OneToMany(() => Message, (message) => message.receiver)
   receivedMessages: Message[];
+  @OneToMany(() => SavedPost, (savedPost) => savedPost.user)
+  savedPosts: SavedPost[];
 }

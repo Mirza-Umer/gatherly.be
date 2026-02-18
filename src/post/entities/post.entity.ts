@@ -8,6 +8,7 @@ import {
 import { User } from '../../users/entities/user.entity';
 import { Like } from '../../likes/entities/like.entity';
 import { Comment } from '../../comments/entities/comment.entity';
+import { SavedPost } from './savedPost.entity';
 
 @Entity()
 export class Post {
@@ -35,7 +36,8 @@ export class Post {
 
   @OneToMany(() => Like, (like) => like.post)
   likes: Like[];
-
+  @OneToMany(() => SavedPost, (savedPost) => savedPost.post)
+  savedByUsers: SavedPost[];
 }
 
 

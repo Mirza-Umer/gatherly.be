@@ -8,6 +8,7 @@ import {
   Get,
   Query,
   Param,
+  Delete,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -40,6 +41,12 @@ export class PostController {
     return this.postService.getAllPosts(take, page, currentUser);
   }
 
+  @UseGuards(AuthGuard('jwt')) @Get('saved') async getSavedPosts(
+    @GetUser() currentUser: User,
+  ) {
+    return await this.postService.getSavedPosts(currentUser.id);
+  }
+
   @Get(':userId')
   find(@Param('userId') userId: number) {
     console.log(userId);
@@ -49,6 +56,20 @@ export class PostController {
   @Get('post/:id')
   getPostById(@Param('id') id: number) {
     return this.postService.getPostById(id);
+  }
+
+  @UseGuards(AuthGuard('jwt')) @Post(':id/save') async savePost(
+    @Param('id') postId: string,
+    @GetUser() currentUser: User,
+  ) {
+    console.log('userId', currentUser.id, 'postId', +postId);
+    return await this.postService.savePost(currentUser.id, +postId);
+  }
+  @UseGuards(AuthGuard('jwt')) @Delete(':id/unsave') async unsavePost(
+    @Param('id') postId: string,
+    @GetUser() currentUser: User,
+  ) {
+    return await this.postService.unsavePost(currentUser.id, +postId);
   }
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {

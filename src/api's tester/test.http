@@ -7,10 +7,11 @@
 #
 ###### Send POST request with json body
 ##
-#POST http://localhost:3000/ai-chat/chat
-#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1bWFyMTJAZ21haWwuY29tIiwiaWF0IjoxNzY5MTc5MTA1LCJleHAiOjE3NjkyNjU1MDV9.xHCCnLMdu8Afk7YieaMalVWmv9SlWmkdzm-4yQwKYYs
+POST http://localhost:3000/posts/1/save
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1bWFyMTJAZ21haWwuY29tIiwiaWF0IjoxNzcxMzQ1NDczLCJleHAiOjE3NzE0MzE4NzN9.Ed2n6XGRNrTQkhh7X9tUfks6G3yu9N-_cWkBDP77ik8
+Content-Type: application/json
+
+#DELETE http://localhost:3000/posts/1/unsave
+#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1bWFyMTJAZ21haWwuY29tIiwiaWF0IjoxNzcxMzQ1NDczLCJleHAiOjE3NzE0MzE4NzN9.Ed2n6XGRNrTQkhh7X9tUfks6G3yu9N-_cWkBDP77ik8
 #Content-Type: application/json
-#
-#{
-#  "message": "who is pm of pakistan in 2025?"
-#}
+
