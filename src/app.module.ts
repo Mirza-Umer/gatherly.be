@@ -10,6 +10,7 @@ import { MessagesModule } from './messages/messages.module';
 import { AiChatModule } from './ai-chat/ai-chat.module';
 import { FriendRequestModule } from './friend-request/friend-request.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { FollowModule } from './follow/follow.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     FriendRequestModule,
     MessagesModule,
     AiChatModule,
+    FollowModule,
   ],
   controllers: [AppController],
   providers: [AppService],

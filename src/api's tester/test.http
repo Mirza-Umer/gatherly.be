@@ -1,17 +1,18 @@
 #GET http://localhost:3000/messages/1
 #Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJhaG1hZDEyQGdtYWlsLmNvbSIsImlhdCI6MTc2NzY1MjE4NSwiZXhwIjoxNzY3NzM4NTg1fQ.nB3hITHgqBDcMi88IJv498HQwD16M8qtKEn0A4WQkmc
 
-##### GET request with parameter
-#GET http://localhost:3000/posts/post/54
+####### GET request with parameter
+#GET http://localhost:3000/follow/1/following
+#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJhaG1hZDEyQGdtYWlsLmNvbSIsImlhdCI6MTc3MjExNjc0MywiZXhwIjoxNzcyMjAzMTQzfQ.Xh6dEhHyiRvcfkheMGEbBDGTYcu-1FA9IZviU2KeTQE
 #Accept: application/json
-#
+
 ###### Send POST request with json body
 ##
-POST http://localhost:3000/posts/1/save
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1bWFyMTJAZ21haWwuY29tIiwiaWF0IjoxNzcxMzQ1NDczLCJleHAiOjE3NzE0MzE4NzN9.Ed2n6XGRNrTQkhh7X9tUfks6G3yu9N-_cWkBDP77ik8
+DELETE http://localhost:3000/follow/1/unfollow
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJhaG1hZDEyQGdtYWlsLmNvbSIsImlhdCI6MTc3MjExNjc0MywiZXhwIjoxNzcyMjAzMTQzfQ.Xh6dEhHyiRvcfkheMGEbBDGTYcu-1FA9IZviU2KeTQE
 Content-Type: application/json
 
 #DELETE http://localhost:3000/posts/1/unsave
-#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1bWFyMTJAZ21haWwuY29tIiwiaWF0IjoxNzcxMzQ1NDczLCJleHAiOjE3NzE0MzE4NzN9.Ed2n6XGRNrTQkhh7X9tUfks6G3yu9N-_cWkBDP77ik8
+#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1bWFyMTJAZ21haWwuY29tIiwiaWF0IjoxNzcyMDU5NjExLCJleHAiOjE3NzIxNDYwMTF9.oPfhBIPJ1d9ITkExBVRxAlbsdlbe69DnIIbbroAmSCQ
 #Content-Type: application/json
 
