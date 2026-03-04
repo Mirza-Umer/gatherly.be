@@ -46,9 +46,9 @@ export class FollowService {
   async getFollowing(userId: number) {
     return this.followRepo.find({
       where: {
-        following: { id: userId },
+        follower: { id: userId },
       },
-      relations: ['following',],
+      relations: ['following'],
     })
   }
 
