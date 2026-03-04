@@ -1,44 +1,56 @@
 import {
-  Column,
-  CreateDateColumn,
   Entity,
-  ManyToOne, OneToMany,
   PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToMany,
+  JoinTable,
+  OneToMany,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Like } from '../../likes/entities/like.entity';
 import { Comment } from '../../comments/entities/comment.entity';
-import { SavedPost } from './savedPost.entity';
 
 @Entity()
 export class Post {
   @PrimaryGeneratedColumn()
   id: number;
-  @Column()
-  title: string;
+
   @Column({ nullable: true })
+  title: string;
+
+  @Column({ type: 'text', nullable: true })
   caption: string;
 
+  // ✅ Store image/video URLs
   @Column('simple-array', { nullable: true })
   mediaUrls: string[];
 
-  @Column({ type: 'bytea', nullable: true })
-  photo: Uint8Array;
+  @Column({ type: 'varchar', nullable: true })
+  mediaType: 'image' | 'video' | null;
 
-  @ManyToOne(() => User, (user) => user.posts)
+  // ✅ Post Owner
+  @ManyToOne(() => User, (user) => user.posts, {
+    onDelete: 'CASCADE',
+  })
   user: User;
+
+  // ✅ Likes
+  @OneToMany(() => Like, (like) => like.post)
+  likes: Like[];
+
+  // ✅ Saved Posts
+  @ManyToMany(() => User, (user) => user.savedPosts)
+  @JoinTable()
+  savedByUsers: User[];
 
   @CreateDateColumn()
   createdAt: Date;
 
+  @UpdateDateColumn()
+  updatedAt: Date;
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
-
-  @OneToMany(() => Like, (like) => like.post)
-  likes: Like[];
-  @OneToMany(() => SavedPost, (savedPost) => savedPost.post)
-  savedByUsers: SavedPost[];
 }
-
-
-

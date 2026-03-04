@@ -9,6 +9,7 @@ import {
   Query,
   Param,
   Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -16,68 +17,97 @@ import { GetUser } from '../auth/get-user.decorator';
 import { User } from '../users/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 
 @Controller('posts')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
+  // ✅ CREATE POST (Image or Video)
   @UseGuards(AuthGuard('jwt'))
   @Post('add')
-  @UseInterceptors(FileInterceptor('photo')) // <-- name must match Angular form
+  @UseInterceptors(
+    FileInterceptor('photo', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, callback) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const fileExt = extname(file.originalname);
+          callback(null, `${uniqueSuffix}${fileExt}`);
+        },
+      }),
+      limits: {
+        fileSize: 50 * 1024 * 1024,
+      },
+      fileFilter: (req, file, callback) => {
+        if (
+          file.mimetype.startsWith('image/') ||
+          file.mimetype.startsWith('video/')
+        ) {
+          callback(null, true);
+        } else {
+          callback(new Error('Only image and video files are allowed'), false);
+        }
+      },
+    }),
+  )
   create(
     @Body() createPostDto: CreatePostDto,
     @GetUser() user: User,
-    @UploadedFile() photo: Express.Multer.File,
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.postService.create(createPostDto, user, photo);
+    return this.postService.create(createPostDto, user, file);
   }
-  @Get()
+
+  // ✅ GET ALL POSTS (Pagination)
   @UseGuards(AuthGuard('jwt'))
+  @Get()
   getAllPosts(
     @Query('take') take = 10,
     @Query('page') page = 0,
     @GetUser() currentUser: User,
   ) {
-    return this.postService.getAllPosts(take, page, currentUser);
+    return this.postService.getAllPosts(+take, +page, currentUser);
   }
 
-  @UseGuards(AuthGuard('jwt')) @Get('saved') async getSavedPosts(
-    @GetUser() currentUser: User,
-  ) {
-    return await this.postService.getSavedPosts(currentUser.id);
+  // ✅ GET SAVED POSTS
+  @UseGuards(AuthGuard('jwt'))
+  @Get('saved')
+  getSavedPosts(@GetUser() currentUser: User) {
+    return this.postService.getSavedPosts(currentUser.id);
   }
 
+  // ✅ GET POSTS BY USER
   @Get(':userId')
-  find(@Param('userId') userId: number) {
-    console.log(userId);
+  find(@Param('userId', ParseIntPipe) userId: number) {
     return this.postService.getPostsByUserId(userId);
   }
 
+  // ✅ GET SINGLE POST
   @Get('post/:id')
-  getPostById(@Param('id') id: number) {
+  getPostById(@Param('id', ParseIntPipe) id: number) {
     return this.postService.getPostById(id);
   }
 
-  @UseGuards(AuthGuard('jwt')) @Post(':id/save') async savePost(
-    @Param('id') postId: string,
+  // ✅ SAVE POST
+  @UseGuards(AuthGuard('jwt'))
+  @Post(':id/save')
+  savePost(
+    @Param('id', ParseIntPipe) postId: number,
     @GetUser() currentUser: User,
   ) {
-    console.log('userId', currentUser.id, 'postId', +postId);
-    return await this.postService.savePost(currentUser.id, +postId);
+    return this.postService.savePost(currentUser.id, postId);
   }
-  @UseGuards(AuthGuard('jwt')) @Delete(':id/unsave') async unsavePost(
-    @Param('id') postId: string,
+
+  // ✅ UNSAVE POST
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':id/unsave')
+  unsavePost(
+    @Param('id', ParseIntPipe) postId: number,
     @GetUser() currentUser: User,
   ) {
-    return await this.postService.unsavePost(currentUser.id, +postId);
+    return this.postService.unsavePost(currentUser.id, postId);
   }
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-  //   return this.postService.update(+id, updatePostDto);
-  // }
-  //
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.postService.remove(+id);
-  // }
 }
