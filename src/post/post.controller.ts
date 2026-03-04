@@ -41,7 +41,7 @@ export class PostController {
       limits: {
         fileSize: 50 * 1024 * 1024,
       },
-      fileFilter: (req, file, callback) => {
+      fileFilter: (req, file  , callback) => {
         if (
           file.mimetype.startsWith('image/') ||
           file.mimetype.startsWith('video/')
