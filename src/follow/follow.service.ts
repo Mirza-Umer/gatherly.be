@@ -10,12 +10,24 @@ import { Repository } from 'typeorm';
 export class FollowService {
   constructor(
     @InjectRepository(Follow) private followRepo: Repository<Follow>,
-  ) {}
+  ) { }
 
   async follow(targetUserId: number, currentUser: User) {
     if (currentUser.id === targetUserId) {
       throw new BadRequestException("You can't follow yourself");
     }
+
+    const existingFollow = await this.followRepo.findOne({
+      where: {
+        follower: { id: currentUser.id },
+        following: { id: targetUserId },
+      },
+    });
+
+    if (existingFollow) {
+      throw new BadRequestException("You are already following this user");
+    }
+
     return this.followRepo.save({
       follower: { id: currentUser.id },
       following: { id: targetUserId },
@@ -45,6 +57,18 @@ export class FollowService {
     if (currentUser.id === targetUserId) {
       throw new BadRequestException("You can't unfollow yourself");
     }
+
+    const existingFollow = await this.followRepo.findOne({
+      where: {
+        follower: { id: currentUser.id },
+        following: { id: targetUserId },
+      },
+    });
+
+    if (!existingFollow) {
+      throw new BadRequestException("You are not following this user");
+    }
+
     return this.followRepo.delete({
       follower: { id: currentUser.id },
       following: { id: targetUserId },
