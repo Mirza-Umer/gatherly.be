@@ -38,6 +38,9 @@ export class User {
   @Column()
   age: number;
 
+  @Column({ nullable: true })
+  profilePhoto: string;
+
   @OneToMany(() => Post, (post) => post.user, { nullable: true })
   posts: Post[];
 

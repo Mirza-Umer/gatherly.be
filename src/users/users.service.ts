@@ -1,5 +1,6 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
@@ -9,7 +10,7 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepo: Repository<User>,
-  ) {}
+  ) { }
   async createUser(signUpDto: CreateUserDto): Promise<User> {
     const { email, password } = signUpDto;
 
@@ -49,36 +50,31 @@ export class UsersService {
 
   async getAllUsers(): Promise<User[]> {
     return await this.userRepo.find({
-      relations: {sentFriendRequests: true, receivedFriendRequests: true},
+      relations: { sentFriendRequests: true, receivedFriendRequests: true },
     });
   }
-  
+
   async searchUsers(searchInput: string): Promise<User[]> {
     return await this.userRepo.find({
       where: [{ firstName: ILike(`%${searchInput}%`) },
-          { lastName: ILike(`%${searchInput}%`) },
+      { lastName: ILike(`%${searchInput}%`) },
       ],
       relations: ['sentFriendRequests', 'receivedFriendRequests',],
     });
   }
 
-  // create(createUserDto: CreateUserDto) {
-  //   return 'This action adds a new user';
-  // }
-  //
-  // findAll() {
-  //   return `This action returns all users`;
-  // }
-  //
-  // findOne(id: number) {
-  //   return `This action returns a #${id} user`;
-  // }
-  //
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
-  //
-  // remove(id: number) {
-  //   return `This action removes a #${id} user`;
-  // }
+  async updateProfile(id: number, dto: UpdateProfileDto): Promise<User> {
+    const user = await this.userRepo.findOne({ where: { id } });
+    if (!user) throw new NotFoundException('User not found');
+    Object.assign(user, dto);
+    return this.userRepo.save(user);
+  }
+
+  async uploadProfilePhoto(id: number, filePath: string): Promise<User> {
+    const user = await this.userRepo.findOne({ where: { id } });
+    if (!user) throw new NotFoundException('User not found');
+    user.profilePhoto = filePath;
+    return this.userRepo.save(user);
+  }
 }
+

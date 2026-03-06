@@ -82,7 +82,6 @@ export class PostService {
     return { data, total };
   }
 
-  // ✅ GET POSTS BY USER
   async getPostsByUserId(id: number) {
     const posts = await this.postRepo.find({
       where: { user: { id } },
