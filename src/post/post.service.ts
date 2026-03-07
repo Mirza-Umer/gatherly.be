@@ -61,7 +61,6 @@ export class PostService {
     return await this.postRepo.save(post);
   }
 
-  // ✅ GET ALL POSTS
   async getAllPosts(take = 10, page = 0, currentUser?: User) {
     const [posts, total] = await this.postRepo.findAndCount({
       order: { createdAt: 'DESC' },
@@ -92,7 +91,6 @@ export class PostService {
     return { posts };
   }
 
-  // ✅ GET SINGLE POST
   async getPostById(id: number) {
     const post = await this.postRepo.findOne({
       where: { id },
@@ -106,7 +104,6 @@ export class PostService {
     return post;
   }
 
-  // ✅ SAVE POST
   async savePost(userId: number, postId: number) {
     const existing = await this.savedPostRepo.findOne({
       where: { user: { id: userId }, post: { id: postId } },
@@ -124,7 +121,6 @@ export class PostService {
     return await this.savedPostRepo.save(saved);
   }
 
-  // ✅ UNSAVE POST
   async unsavePost(userId: number, postId: number) {
     await this.savedPostRepo.delete({
       user: { id: userId },
@@ -134,7 +130,6 @@ export class PostService {
     return { message: 'Post unsaved' };
   }
 
-  // ✅ GET SAVED POSTS
   async getSavedPosts(userId: number) {
     const savedPosts = await this.savedPostRepo.find({
       where: { user: { id: userId } },
