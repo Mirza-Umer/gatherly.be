@@ -11,9 +11,17 @@ import { AiChatModule } from './ai-chat/ai-chat.module';
 import { FriendRequestModule } from './friend-request/friend-request.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FollowModule } from './follow/follow.module';
+import { ConfigModule } from '@nestjs/config';
+import { MailModule } from './mail/mail.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { EventBusModule } from './event-bus/event-bus.module';
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot(),
+    EventBusModule,
+    ConfigModule.forRoot({ isGlobal: true }),
+    MailModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -37,4 +45,4 @@ import { FollowModule } from './follow/follow.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

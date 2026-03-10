@@ -9,6 +9,8 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigService } from '@nestjs/config';
 
+import { MailModule } from '../mail/mail.module';
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
@@ -22,4 +24,4 @@ import { ConfigService } from '@nestjs/config';
   providers: [AuthService, UsersService, JwtStrategy, ConfigService],
   exports: [JwtStrategy, PassportModule],
 })
-export class AuthModule {}
+export class AuthModule { }

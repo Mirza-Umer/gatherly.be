@@ -10,20 +10,22 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/create-auth.dto';
 import * as bcrypt from 'bcrypt';
+import { EventBusService } from '../event-bus/event-bus.service';
 
 @Injectable()
 export class AuthService {
   constructor(@InjectRepository(User) private userRepo: Repository<User>,
-              private usersService: UsersService,
-              private jwtService:JwtService,
-              ) {}
+    private usersService: UsersService,
+    private jwtService: JwtService,
+    private eventBus: EventBusService,
+  ) { }
 
   async signIn(signInDto: LoginDto): Promise<{ accessToken: string }> {
     const { email, password } = signInDto;
 
     const user = await this.userRepo.findOne({
       where: { email },
-      select: ['id', 'email', 'password'],
+      select: ['id', 'email', 'password', 'firstName', 'lastName'],
     });
     if (!user) {
       throw new NotFoundException('User not found');
@@ -41,6 +43,13 @@ export class AuthService {
 
 
     const accessToken = this.jwtService.sign(payload);
+
+    // Emit event globally via custom EventBusService
+    this.eventBus.emit('user.logged_in', {
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    });
 
     return { accessToken };
   }
