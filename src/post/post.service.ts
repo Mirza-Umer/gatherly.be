@@ -10,6 +10,7 @@ import { Post } from './entities/post.entity';
 import { User } from '../users/entities/user.entity';
 import { Like } from '../likes/entities/like.entity';
 import { SavedPost } from './entities/savedPost.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class PostService {
@@ -22,7 +23,12 @@ export class PostService {
 
     @InjectRepository(SavedPost)
     private readonly savedPostRepo: Repository<SavedPost>,
-  ) {}
+
+    @InjectRepository(User)
+    private readonly userRepo: Repository<User>,
+
+    private readonly eventEmitter: EventEmitter2,
+  ) { }
 
   // ✅ CREATE POST
   async create(
@@ -58,7 +64,13 @@ export class PostService {
       user,
     });
 
-    return await this.postRepo.save(post);
+    const savedPost = await this.postRepo.save(post);
+
+    // Fetch full author user from DB to ensure firstName/lastName are present
+    const fullAuthor = await this.userRepo.findOne({ where: { id: user.id } });
+
+    this.eventEmitter.emit('post.created', { post: savedPost, author: fullAuthor || user });
+    return savedPost;
   }
 
   async getAllPosts(take = 10, page = 0, currentUser?: User) {
