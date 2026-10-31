@@ -11,10 +11,11 @@ import { AiChatModule } from './ai-chat/ai-chat.module';
 import { FriendRequestModule } from './friend-request/friend-request.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FollowModule } from './follow/follow.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailModule } from './mail/mail.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { EventBusModule } from './event-bus/event-bus.module';
+import { MetadataWithSuchNameAlreadyExistsError } from 'typeorm';
 
 @Module({
   imports: [
@@ -22,15 +23,19 @@ import { EventBusModule } from './event-bus/event-bus.module';
     EventBusModule,
     ConfigModule.forRoot({ isGlobal: true }),
     MailModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'POSTGRES',
-      database: 'gatherly-db',
-      autoLoadEntities: true,
-      synchronize: false,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('DB_HOST', 'localhost'),
+        port: Number(configService.get<number>('DB_PORT', 5433)),
+        username: configService.get<string>('DB_USERNAME', 'postgres'),
+        password: configService.get<string>('DB_PASSWORD', 'postgres'),
+        database: configService.get<string>('DB_NAME', 'gatherly-db'),
+        autoLoadEntities: true,
+        synchronize: false,
+      }),
     }),
     UsersModule,
     AuthModule,

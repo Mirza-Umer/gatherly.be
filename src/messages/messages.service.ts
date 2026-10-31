@@ -14,58 +14,40 @@ export class MessagesService {
     private readonly userRepo: Repository<User>,
   ) {}
 
-  async sendMessage(senderId: number, dto: CreateMessageDto) {
-    const sender = await this.userRepo.findOneBy({ id: senderId });
+  async saveMessage(senderId: number, receiverId: number, content: string): Promise<Message> {
+    const sender = await this.userRepo.findOne({
+      where: { id: senderId },
+      select: ['id', 'firstName', 'lastName', 'profilePhoto'],
+    });
     if (!sender) throw new NotFoundException('Sender not found');
 
-    const receiver = await this.userRepo.findOneBy({ id: dto.receiverId });
+    const receiver = await this.userRepo.findOne({
+      where: { id: receiverId },
+      select: ['id', 'firstName', 'lastName', 'profilePhoto'],
+    });
     if (!receiver) throw new NotFoundException('Receiver not found');
 
     const message = this.messageRepo.create({
-      message: dto.message,
+      message: content,
       sender,
       receiver,
     });
 
-    const savedMessage = await this.messageRepo.save(message);
-
-    return savedMessage;
+    return this.messageRepo.save(message);
   }
 
-  getMessages(senderId: number, receiverId: number) {
+  sendMessage(senderId: number, dto: CreateMessageDto): Promise<Message> {
+    return this.saveMessage(senderId, dto.receiverId, dto.message);
+  }
+
+  getMessages(senderId: number, receiverId: number): Promise<Message[]> {
     return this.messageRepo.find({
       where: [
         { sender: { id: senderId }, receiver: { id: receiverId } },
-        { sender: { id:  receiverId }, receiver: { id: senderId } },
+        { sender: { id: receiverId }, receiver: { id: senderId } },
       ],
       order: { createdAt: 'ASC' },
       relations: ['sender', 'receiver'],
     });
   }
-
-  async saveMessage(senderId: number, receiverId: number, message: string) {
-    const msg = this.messageRepo.create({
-      sender: { id: senderId },
-      receiver: { id: receiverId },
-      message,
-    });
-
-    return this.messageRepo.save(msg);
-  }
-
-  // findAll() {
-  //   return `This action returns all messages`;
-  // }
-  //
-  // findOne(id: number) {
-  //   return `This action returns a #${id} message`;
-  // }
-  //
-  // update(id: number, updateMessageDto: UpdateMessageDto) {
-  //   return `This action updates a #${id} message`;
-  // }
-  //
-  // remove(id: number) {
-  //   return `This action removes a #${id} message`;
-  // }
 }
